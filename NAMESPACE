@@ -1,0 +1,8 @@
+export(metapone)
+exportClasses(metapone.result)
+import(doParallel, fields)
+importFrom("methods", "new")
+importFrom("parallel", "makeCluster")
+importFrom("parallel", "stopCluster")
+importFrom("foreach", "foreach")
+importFrom("foreach", "%dopar%")
