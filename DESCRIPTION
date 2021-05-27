@@ -1,8 +1,8 @@
 Package: metapone
 Type: Package
 Title: Conducts pathway test of metabolomics data using a weighted permutation test
-Version: 1.99.2
-Date: 2021-05-24
+Version: 0.99.2
+Date: 2021-05-26
 Author: Tianwei Yu <yutianwei@cuhk.edu.cn>
 Maintainer: Tianwei Yu <yutianwei@cuhk.edu.cn>
 Description: Permutation test with weights given to metabolic features based on how many metabolites they could potentially match to; can combine positive and negative mode results.
