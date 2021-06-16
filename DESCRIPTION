@@ -3,8 +3,6 @@ Type: Package
 Title: Conducts pathway test of metabolomics data using a weighted permutation test
 Version: 0.99.1
 Date: 2021-06-16
-Author: Tianwei Yu <yutianwei@cuhk.edu.cn>
-Maintainer: Tianwei Yu <yutianwei@cuhk.edu.cn>
 Authors@R: c(
     person("Tianwei", "Yu", role="aut"),
     person("Tianwei", "Yu", email="yutianwei@cuhk.edu.cn", role="cre"))
