@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:a44b1d5f03c710c03fc9ac7799fbff9a359765de7aeb9c79e479f72812e24e75
-size 491
+\name{pos}
+\alias{pos}
+\docType{data}
+\title{
+Example positive mode data
+}
+\description{
+Data matrix from positive mode results.}
+\usage{data("pos")}
+\format{
+  A data frame with 2252 observations on the following 4 variables.
+  \describe{
+    \item{\code{m.z}}{a numeric vector}
+    \item{\code{retention.time}}{a numeric vector}
+    \item{\code{p.value}}{a numeric vector}
+    \item{\code{statistic}}{a numeric vector}
+  }
+}
+\examples{
+data(pos)
+}
+\keyword{datasets}

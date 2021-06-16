@@ -1,3 +1,22 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ded38f337c94d3eca342e73a4dbeee49de7f534abd50aba5be256cee06c82eb3
-size 489
+\name{neg}
+\alias{neg}
+\docType{data}
+\title{
+Example negative mode data
+}
+\description{
+Data matrix from negative mode results.
+}
+\usage{data("neg")}
+\format{
+  A data frame with 3337 observations on the following 4 variables.
+  \describe{
+    \item{\code{m.z}}{a numeric vector}
+    \item{\code{retention.time}}{a numeric vector}
+    \item{\code{p.value}}{a numeric vector}
+    \item{\code{statistic}}{a numeric vector}}
+}
+\examples{
+data(neg)
+}
+\keyword{datasets}

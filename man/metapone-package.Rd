@@ -1,3 +1,17 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:2db276abb499c389f5f10f57fd9dfee7e1aa998760bb116d70745f088a583ddc
-size 428
+\name{metapone-package}
+\alias{metapone-package}
+\docType{package}
+\title{
+\packageTitle{metapone}
+}
+\description{
+\packageDescription{metapone}
+The package conducts a permutation test that is based on the hypergeometric test for metabolic pathway analysis. 
+}
+\details{
+The package conducts a weighted hypergeometric test on metabolomics data
+}
+\author{
+Tianwei Yu<yutianwei@cuhk.edu.cn>
+}
+\keyword{ package }

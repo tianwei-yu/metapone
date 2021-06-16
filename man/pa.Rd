@@ -1,3 +1,28 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:54368a150804eb845f5ae68a5e290658bf6988721a0664b5cb204fceb00bebee
-size 633
+\name{pa}
+\alias{pa}
+\docType{data}
+\title{
+Pathway-metabolite match file.
+}
+\description{
+mapps pathways with metabolites.
+}
+\usage{data("pa")}
+\format{
+  A data frame with 5395 observations on the following 5 variables.
+  \describe{
+    \item{\code{database}}{a character vector}
+    \item{\code{pathway.name}}{a character vector}
+    \item{\code{HMDB.ID}}{a character vector}
+    \item{\code{KEGG.ID}}{a character vector}
+    \item{\code{category}}{a character vector}
+  }
+}
+\source{
+https://smpdb.ca/
+https://shuzhao-li.github.io/mummichog.org/software.html
+}
+\examples{
+data(pa)
+}
+\keyword{datasets}
