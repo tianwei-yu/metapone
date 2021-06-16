@@ -10,7 +10,7 @@ Authors@R: c(
     person("Tianwei", "Yu", email="yutianwei@cuhk.edu.cn", role="cre"))
 Description: Permutation test with weights given to metabolic features based on how many metabolites they could potentially match to; can combine positive and negative mode results.
 Depends: R (>= 3.5.0), doParallel, fields, parallel, foreach
-Suggests: markdown(≥ 1.1)
+Suggests: markdown(>= 1.1)
 Imports: methods
 biocViews: Technology, MassSpectrometry, Metabolomics, Pathways
 License: GPL(>=2)
