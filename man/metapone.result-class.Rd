@@ -28,7 +28,4 @@ Objects can be created by calls of the form \code{new("metapone.result", ...)}.
   }
 }
 \author{Tianwei Yu}
-\seealso{
-  \link[Category]{metapone}
-}
 \keyword{classes}
