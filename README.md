@@ -3,9 +3,9 @@ The metapone package conducts pathway tests for untargeted metabolomics data. It
 It can be install by calling devtools::install_github("tianwei-yu/metapone"). To use the package, you need to have testing results on untargetted metabolomics data ready. The test result should contain at least three clumns - m/z, retention time, and feature p-value. An example input data can be seen here:
 
 ```{r}
-library(metapone)
-data(pos)
-head(pos)
+> library(metapone)
+> data(pos)
+> head(pos)
 
 
        m.z retention.time    p.value statistic
