@@ -48,16 +48,14 @@ Setting the cap of n: max.match.count = 10
 Other parameters include p.threshold, which controls which metabolic feature is considered significant, and num.nodes, which controls the number of CPU cores to use in the computation. The testing is done by permutation. Overall, the analysis is conducted this way:
 
 ```{r example analysis}
-r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, num.nodes=2, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=500,fractional.count.power=0.5, max.match.count=10)
-hist(r@test.result[,1])
+r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10)
+hist(ptable(r)[,1])
 ```
 
 We can subset the pathways that are significant:
 
 ```{r example continued}
-selection<-which(r@test.result[,1]<0.05)
-r@test.result<-r@test.result[selection,]
-r@mapped.features<-r@mapped.features[selection]
-r@test.result
-r@mapped.features[which(r@test.result[,2]>3)]
+selection<-which(ptable(r)[,1]<0.025)
+ptable(r)[selection,]
+ftable(r)[which(ptable(r)[,1]<0.025 & ptable(r)[,2]>=2)]
 ```
