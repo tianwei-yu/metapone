@@ -82,13 +82,11 @@ Other parameters include p.threshold, which controls which metabolic feature is 
 ```{r example analysis}
 r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10)
 hist(ptable(r)[,1])
+```
 
 ![image](https://user-images.githubusercontent.com/65949207/130909749-b681e2f9-62c5-4d02-9ac5-510888397262.png)
 
-
-```
-
-We can subset the pathways that are significant:
+We can subset the pathways that are significant with a good number of metabolites matched:
 
 ```{r example continued}
 selection<-which(ptable(r)[,1]<0.025)
