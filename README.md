@@ -1,6 +1,14 @@
-The metapone package conducts pathway tests for untargeted metabolomics data. It has three main characteristics: (1) expanded database combining SMPDB and Mummichog databases, with manual cleaning to remove redundancies; (2) A new weighted testing scheme to address the issue of metabolite-feature matching uncertainties; (3) Can consider positive mode and negative mode data in a single analysis. 
+The metapone package conducts pathway tests for untargeted metabolomics data. It has three main characteristics: (1) expanded database combining SMPDB and Mummichog databases, with manual cleaning to remove redundancies; (2) A new weighted testing scheme to address the issue of metabolite-feature matching uncertainties; (3) Can consider positive mode and negative mode data in a single analysis. The two databases are at:
 
-It can be install by calling devtools::install_github("tianwei-yu/metapone"). To use the package, you need to have testing results on untargetted metabolomics data ready. The test result should contain at least three clumns - m/z, retention time, and feature p-value. An example input data can be seen here:
+https://smpdb.ca/
+
+https://shuzhao-li.github.io/mummichog.org/software.html
+
+Metapone can be install by calling:
+
+devtools::install_github("tianwei-yu/metapone"). 
+
+To use the package, you need to have testing results on untargetted metabolomics data ready. The test result should contain at least three clumns - m/z, retention time, and feature p-value. An example input data can be seen here:
 
 ```{r}
 > library(metapone)
