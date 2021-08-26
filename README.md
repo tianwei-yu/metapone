@@ -6,7 +6,7 @@ It can be install by calling devtools::install_github("tianwei-yu/metapone"). To
 library(metapone)
 data(pos)
 head(pos)
-```
+
 
        m.z retention.time    p.value statistic
 1 85.04027       55.66454 0.22109229 -1.231240
@@ -15,7 +15,7 @@ head(pos)
 4 86.06064      194.81306 0.26069118  1.131101
 5 86.08001       54.74512 0.17206535  1.375352
 6 86.09704      177.73650 0.07541608  1.796427
-
+```
 
 The input should contain at least three clumns - m/z, retention time, and feature p-value:
 
