@@ -67,8 +67,8 @@ Here is the combined database after manual pruning of some highly-overlaping pat
 The user can specify which adduct ions are allowed by setting the allowed adducts. For example:
 
 ```{r example adduct ions}
-pos.adductlist = c("M+H", "M+NH4", "M+Na", "M+ACN+H", "M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", "2M+ACN+H")
-neg.adductlist = c("M-H", "M-2H", "M-2H+Na", "M-2H+K", "M-2H+NH4", "M-H2O-H", "M-H+Cl", "M+Cl", "M+2Cl")
+> pos.adductlist = c("M+H", "M+NH4", "M+Na", "M+ACN+H", "M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", "2M+ACN+H")
+> neg.adductlist = c("M-H", "M-2H", "M-2H+Na", "M-2H+K", "M-2H+NH4", "M-H2O-H", "M-H+Cl", "M+Cl", "M+2Cl")
 ```
 
 It is common for a feature to be matched to multiple metabolites. Assume a feature is matched to n metabolites, metapone weighs the feature by (1/n)^p, where p is a power term to tune the penalty. n can also be capped at a certain level such that the penalty is limited. These are controlled by parameters:
@@ -80,8 +80,9 @@ Setting the cap of n: max.match.count = 10 (this is to cap the level of penalty 
 Other parameters include p.threshold, which controls which metabolic feature is considered significant. The testing is done by permutation. Overall, the analysis is conducted this way:
 
 ```{r example analysis}
-r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10)
-hist(ptable(r)[,1])
+> r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, 
+     p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10)
+> hist(ptable(r)[,1])
 ```
 
 ![image](https://user-images.githubusercontent.com/65949207/130909749-b681e2f9-62c5-4d02-9ac5-510888397262.png)
