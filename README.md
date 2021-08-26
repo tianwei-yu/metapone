@@ -1,10 +1,18 @@
-# metapone
-R package of pathway testing for untargeted metabolomics data
 The metapone package conducts pathway tests for untargeted metabolomics data. It has three main characteristics: (1) expanded database combining SMPDB and Mummichog databases, with manual cleaning to remove redundancies; (2) A new weighted testing scheme to address the issue of metabolite-feature matching uncertainties; (3) Can consider positive mode and negative mode data in a single analysis. 
 
-```{r setup}
-library(metapone)
-```
+It can be install by calling devtools::install_github("tianwei-yu/metapone"). To use the package, you need to have testing results on untargetted metabolomics data ready. The test result should contain at least three clumns - m/z, retention time, and feature p-value. An example input data can be seen here:
+
+> library(metapone)
+> data(pos)
+> head(pos)
+       m.z retention.time    p.value statistic
+1 85.04027       55.66454 0.22109229 -1.231240
+2 85.07662       56.93586 0.52181695 -0.642790
+3 85.57425      125.97117 0.13483680 -1.507372
+4 86.06064      194.81306 0.26069118  1.131101
+5 86.08001       54.74512 0.17206535  1.375352
+6 86.09704      177.73650 0.07541608  1.796427
+
 
 The input should contain at least three clumns - m/z, retention time, and feature p-value:
 
