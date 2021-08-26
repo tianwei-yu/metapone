@@ -45,8 +45,12 @@ The test is based on HMDB identification. The common adduct ions are pre-process
 6 HMDB0002386 4.677044     M+3H
 ```
 Pathway information is built-in. It combines SMPDB and Mummichog databases. The two databases can be found here:
+
 https://smpdb.ca/
+
 https://shuzhao-li.github.io/mummichog.org/software.html
+
+Here is the combined database after manual pruning of some highly-overlaping pathways:
 
 ```{r example load pathway}
 > data(pa)
@@ -70,9 +74,10 @@ neg.adductlist = c("M-H", "M-2H", "M-2H+Na", "M-2H+K", "M-2H+NH4", "M-H2O-H", "M
 It is common for a feature to be matched to multiple metabolites. Assume a feature is matched to n metabolites, metapone weighs the feature by (1/n)^p, where p is a power term to tune the penalty. n can also be capped at a certain level such that the penalty is limited. These are controlled by parameters:
 
 Setting p: fractional.count.power = 0.5
-Setting the cap of n: max.match.count = 10
 
-Other parameters include p.threshold, which controls which metabolic feature is considered significant, and num.nodes, which controls the number of CPU cores to use in the computation. The testing is done by permutation. Overall, the analysis is conducted this way:
+Setting the cap of n: max.match.count = 10 (this is to cap the level of penalty on a multiple-matched feature.
+
+Other parameters include p.threshold, which controls which metabolic feature is considered significant. The testing is done by permutation. Overall, the analysis is conducted this way:
 
 ```{r example analysis}
 r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10)
