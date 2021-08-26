@@ -6,7 +6,9 @@ https://shuzhao-li.github.io/mummichog.org/software.html
 
 Metapone can be install by calling:
 
+```{install}
 devtools::install_github("tianwei-yu/metapone"). 
+```
 
 To use the package, you need to have testing results on untargetted metabolomics data ready. The test result should contain at least three clumns - m/z, retention time, and feature p-value. An example input data can be seen here:
 
