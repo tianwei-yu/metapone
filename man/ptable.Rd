@@ -26,3 +26,11 @@ return the \code{data.frame} of test statistics for each pathway.
 \seealso{
   ftable
 }
+\usage{
+data(hmdbCompMZ.metapone)
+data(pa)
+data(pos)
+data(neg)
+r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10)
+head(ptable(r))
+}

@@ -20,10 +20,10 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 	dat<-list(pos, neg)
 
 	comp.mz<-new("list")
-	for(i in 1:length(adductlist)) comp.mz[[i]]<-hmdbCompMZ[hmdbCompMZ[,3] %in% adductlist[[i]],]
+	for(i in seq_len(length(adductlist))) comp.mz[[i]]<-hmdbCompMZ[hmdbCompMZ[,3] %in% adductlist[[i]],]
 
 	to.remove<-rep(FALSE, 2)
-	for(i in 1:length(dat))
+	for(i in seq_len(length(dat)))
 	{
 		if(is.null(dat[[i]])) to.remove[i]<-TRUE
 	}
@@ -36,7 +36,7 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 	}
 	nnn<-1
 
-	for(n in 1:length(dat))
+	for(n in seq_len(length(dat)))
 	{
 		this.dat<-dat[[n]]
 		this.adductlist<-adductlist[[n]]
@@ -54,7 +54,7 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 			mass.match<-function(x, known.mz, match.tol.ppm=5)
 			{
 				mass.matched.pos<-rep(0, length(x))
-				for(i in 1:length(x))
+				for(i in seq_len(length(x)))
 				{
 					this.d<-abs((x[i]-known.mz)/x[i])
 					if(sum(!is.na(this.d))>0)
@@ -76,12 +76,12 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 				{
 					d<-abs(this.dat[i,1]-this.kegg[,2])/this.dat[i,1]
 					sel<-which(d <= (match.tol.ppm*1e-6))
-					for(j in 1:length(sel)) this.matched<-rbind(this.matched, c(i, sel[j],this.dat[i,],this.kegg[sel[j],]))
+					for(j in seq_len(length(sel))) this.matched<-rbind(this.matched, c(i, sel[j],this.dat[i,],this.kegg[sel[j],]))
 				}
 			
 				this.matched<-this.matched[-1,]
 				if(is.null(nrow(this.matched))) this.matched<-matrix(this.matched, ncol=2)
-				this.matched<-this.matched[,-1:-2]
+				this.matched<-this.matched[,seq(-1,-2)]
 			}
 			this.matched
 		}
@@ -133,7 +133,7 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 
 		rec2<-new("list")    
 
-		for(m in 1:length(pathways))
+		for(m in seq_len(length(pathways)))
 		{
 			pathway<-pathways[m]
 			metabolites<-pa[which(pa[,2]==pathway),3]
@@ -183,7 +183,7 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 			that.sig.mapped<-that.matched[that.matched[,3]<=p.threshold,c(5,8)]
 			that.sig.mapped<-that.sig.mapped[which(that.sig.mapped[,1] %in% pa[,3]),]
 
-			for(m in 1:length(pathways))
+			for(m in seq_len(length(pathways)))
 			{
 				pathway<-pathways[m]
 				metabolites<-pa[which(pa[,2]==pathway),3]
@@ -196,12 +196,12 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 			}
 			r
 		}
-		z<-bplapply(1:n.permu, perm.fun, all.mapped=all.mapped, pathways=pathways, pa=pa, that.matched=matched, uniq.pval=uniq.pval, uniq.prod=uniq.prod, p.threshold=p.threshold, prod=prod)
+		z<-bplapply(seq_len(n.permu), perm.fun, all.mapped=all.mapped, pathways=pathways, pa=pa, that.matched=matched, uniq.pval=uniq.pval, uniq.prod=uniq.prod, p.threshold=p.threshold, prod=prod)
 		
 		rec.permu<-matrix(0,ncol=n.permu, nrow=length(z[[1]]))
-		for(i in 1:n.permu) rec.permu[,i]<-z[[i]]
+		for(i in seq_len(n.permu)) rec.permu[,i]<-z[[i]]
 		
-		for(m in 1:nrow(rec))
+		for(m in seq_len(nrow(rec)))
 		{
 			if(!is.na(rec[m,1]))
 			{
@@ -215,8 +215,8 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 	#stopCluster(cl)
 	
 	rec<-as.data.frame(rec)
-	for(i in 1:4) rec[,i]<-as.numeric(as.vector(rec[,i]))
-	for(i in 5:6) rec[,i]<-as.vector(rec[,i])
+	for(i in seq(1,4)) rec[,i]<-as.numeric(as.vector(rec[,i]))
+	for(i in seq(5,6)) rec[,i]<-as.vector(rec[,i])
 
 	names(rec2)<-pathways
 

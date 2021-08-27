@@ -7,7 +7,12 @@ METAbolic pathway testing using both POsitive and NEgative mode data
 Metapone conducts pathway tests for untargeted metabolomics data. It has three main characteristics: (1) expanded database combining SMPDB and Mummichog databases, with manual cleaning to remove redundancies; (2) A new weighted testing scheme to address the issue of metabolite-feature matching uncertainties; (3) Can consider positive mode and negative mode data in a single analysis.
 }
 \usage{
-metapone(pos = NULL, neg = NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", "M+Na", "M+ACN+H", "M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", "2M+ACN+H"), neg.adductlist = c("M-H", "M-2H", "M-2H+Na", "M-2H+K", "M-2H+NH4", "M-H2O-H", "M-H+Cl", "M+Cl", "M+2Cl"), use.fractional.count = TRUE, match.tol.ppm = 5, p.threshold = 0.05, n.permu = 200, fractional.count.power = 0.5, max.match.count = 10)
+metapone(pos = NULL, neg = NULL, pa, hmdbCompMZ, pos.adductlist = 
+c("M+H", "M+NH4", "M+Na", "M+ACN+H", "M+ACN+Na", "M+2ACN+H", "2M+H", 
+"2M+Na", "2M+ACN+H"), neg.adductlist = c("M-H", "M-2H", "M-2H+Na", 
+"M-2H+K", "M-2H+NH4", "M-H2O-H", "M-H+Cl", "M+Cl", "M+2Cl"), 
+use.fractional.count = TRUE, match.tol.ppm = 5, p.threshold = 0.05, 
+n.permu = 200, fractional.count.power = 0.5, max.match.count = 10)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -67,6 +72,7 @@ data(hmdbCompMZ.metapone)
 data(pa)
 data(pos)
 data(neg)
-r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10)
+r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,
+   n.permu=100,fractional.count.power=0.5, max.match.count=10)
 hist(ptable(r)[,1])
 }

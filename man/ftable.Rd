@@ -27,3 +27,13 @@ Each pathway is represented by a \code{data.frame} as an item in the
 \seealso{
   ptable
 }
+\usage{
+data(hmdbCompMZ.metapone)
+data(pa)
+data(pos)
+data(neg)
+r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,
+   n.permu=100,fractional.count.power=0.5, max.match.count=10)
+ftable(r)[1:6]
+}
+
