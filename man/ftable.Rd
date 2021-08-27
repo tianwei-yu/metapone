@@ -8,9 +8,6 @@
 \description{
 Returns a \code{list} containing the mapped features in each pathway.
 }
-\usage{
-\S4method{ftable}{metaponeResult}(object)
-}
 \arguments{
   \item{object}{A metaponeResult object.}
 }
