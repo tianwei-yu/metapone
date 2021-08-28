@@ -1,7 +1,7 @@
 Package: metapone
 Type: Package
 Title: Conducts pathway test of metabolomics data using a weighted permutation test
-Version: 0.99.5
+Version: 0.99.6
 Date: 2021-08-26
 Authors@R: c(
     person("Tianwei", "Yu", role="aut"),
