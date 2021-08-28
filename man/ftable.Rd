@@ -8,10 +8,12 @@
 \description{
 Returns a \code{list} containing the mapped features in each pathway.
 }
+\usage{
+\S4method{ftable}{metaponeResult}(object)
+}
 \arguments{
   \item{object}{A metaponeResult object.}
 }
-
 \details{
 Each pathway is represented by a \code{data.frame} as an item in the
 		list object. The dataframe include information of m.z, 
@@ -24,7 +26,7 @@ Each pathway is represented by a \code{data.frame} as an item in the
 \seealso{
   ptable
 }
-\usage{
+\examples{
 data(hmdbCompMZ.metapone)
 data(pa)
 data(pos)

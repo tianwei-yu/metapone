@@ -8,6 +8,9 @@
 \description{
 return the \code{data.frame} of test statistics for each pathway.
 }
+\usage{
+\S4method{ptable}{metaponeResult}(object)
+}
 \arguments{
   \item{object}{A metaponeResult object.}
 }
@@ -23,7 +26,7 @@ return the \code{data.frame} of test statistics for each pathway.
 \seealso{
   ftable
 }
-\usage{
+\examples{
 data(hmdbCompMZ.metapone)
 data(pa)
 data(pos)
