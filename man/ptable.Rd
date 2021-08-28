@@ -20,6 +20,9 @@ return the \code{data.frame} of test statistics for each pathway.
 		n_metabolites, significant metabolites, mapped_metabolite IDs 
 		and pathway name. 
 }
+\value{
+The method returns a data frame with 6 columns: "p_value", "n_significant metabolites", "n_mapped_metabolites", "n_metabolites", "significant metabolites", "mapped_metabolites".
+ }
 \author{
   Tianwei Yu <yutianwei@cuhk.edu.cn>
 }
