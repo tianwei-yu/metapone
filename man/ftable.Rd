@@ -21,7 +21,7 @@ Each pathway is represented by a \code{data.frame} as an item in the
 		ion.type, fractional counts.
 }
 \value{
-The method returns a list. Each item is for a pathway. Matched significant metabolites are included.}
+The method returns a list. Each item is for a pathway. Matched significant metabolites are included.
 }
 \author{
   Tianwei Yu <yutianwei@cuhk.edu.cn>
