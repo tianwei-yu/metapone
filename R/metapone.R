@@ -123,8 +123,9 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 		all.mapped<-matched[,c(5,8)]
 		all.mapped<-all.mapped[which(all.mapped[,1] %in% pa[,3]),]
 		sig.mapped<-matched[matched[,3]<=p.threshold,c(5,8)]
+		sig.mapped<-as.data.frame(sig.mapped)
 		sig.mapped<-sig.mapped[which(sig.mapped[,1] %in% pa[,3]),]
-
+		
 		pathways<-unique(pa[,2])
 
 		rec<-matrix(NA, nrow=length(pathways),ncol=6)
@@ -181,8 +182,9 @@ function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", 
 			that.all.mapped<-that.matched[,c(5,8)]
 			that.all.mapped<-that.all.mapped[which(that.all.mapped[,1] %in% pa[,3]),]
 			that.sig.mapped<-that.matched[that.matched[,3]<=p.threshold,c(5,8)]
+			that.sig.mapped<-as.data.frame(that.sig.mapped)
 			that.sig.mapped<-that.sig.mapped[which(that.sig.mapped[,1] %in% pa[,3]),]
-
+			
 			for(m in seq_len(length(pathways)))
 			{
 				pathway<-pathways[m]
