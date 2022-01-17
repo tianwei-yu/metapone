@@ -1,0 +1,102 @@
+---
+title: "METAbolic pathway testing combining POsitive and NEgative mode data (metapone)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{metapone}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+The metapone package conducts pathway tests for untargeted metabolomics data. It has three main characteristics: (1) expanded database combining SMPDB and Mummichog databases, with manual cleaning to remove redundancies; (2) A new weighted testing scheme to address the issue of metabolite-feature matching uncertainties; (3) Can consider positive mode and negative mode data in a single analysis.
+
+Compared to existing methods, the weighted testing scheme allows the user to apply different level of penalty for multiple-mapped features, in order to reduce their undue impact on the results. In addition, considering positive mode and negative mode data simultaneously can improve the statistical power of the test.  
+
+```{r setup}
+library(metapone)
+```
+
+The input should contain at least three clumns - m/z, retention time, and feature p-value. Here to illustrate the usage of the method, we borrow the test results from our published study "Use of high-resolution metabolomics for the identification of metabolic T signals associated with traffic-related air pollution" in Environment International. 120: 145–154.
+
+The positive mode results are in the object "pos". 
+
+```{r example input}
+data(pos)
+head(pos)
+```
+
+The negative mode results are in the object "neg". If both positive mode and negative mode data are present, each is input into the algorithm as a separate matrix
+
+```{r example input second matrix}
+data(neg)
+head(neg)
+```
+
+It is not required that both positive and negative mode results are present. Having a single ion mode is also OK. The test is based on HMDB identification. The common adduct ions are pre-processed and stored in:
+
+```{r example load database}
+data(hmdbCompMZ)
+head(hmdbCompMZ)
+```
+
+Pathway information that was summarized from Mummichog and smpdb is built-in:
+
+```{r example load pathway}
+data(pa)
+head(pa)
+```
+
+The user can specify which adduct ions are allowed by setting the allowed adducts. For example:
+
+```{r example adduct ions}
+pos.adductlist = c("M+H", "M+NH4", "M+Na", "M+ACN+H", "M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", "2M+ACN+H")
+neg.adductlist = c("M-H", "M-2H", "M-2H+Na", "M-2H+K", "M-2H+NH4", "M-H2O-H", "M-H+Cl", "M+Cl", "M+2Cl")
+```
+
+It is common for a feature to be matched to multiple metabolites. Assume a feature is matched to m metabolites, metapone weighs the feature by (1/m)^p, where p is a power term to tune the penalty. m can also be capped at a certain level such that the penalty is limited. These are controlled by parameters:
+
+Setting p: fractional.count.power = 0.5
+Setting the cap of n: max.match.count = 10
+
+It is easy to see that when p=0, no penalty is assigned for multiple-matching. The higher p is, the larger penalty for features that are multiple matched. 
+
+Other parameters include p.threshold, which controls which metabolic feature is considered significant. If use.fgsea = FALSE, then testing is done by permutation. Otherwise, a GSEA type testing is conducted and the parameter use.meta controls using metabolite-based or feature-based testing. Overall, the analysis is conducted this way:
+
+```{r example analysis, warning=FALSE}
+# permutation test
+r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=200,fractional.count.power=0.5, max.match.count=10, use.fgsea = FALSE)
+
+# GSEA type testing based on metabolites
+#r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10, use.fgsea = TRUE, use.meta = TRUE)
+
+# GSEA type testing based on features
+#r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10, use.fgsea = TRUE, use.meta = FALSE)
+
+hist(ptable(r)[,1])
+```
+
+We can subset the pathways that are significant:
+
+```{r example continued}
+selection<-which(ptable(r)[,1]<0.025)
+ptable(r)[selection,]
+```
+
+We note that applying the multiple-matching penalty using parameter fractional.count.power will effectively making fractional counts out of the multiple-matched features. Thus the mapped feature tables, you will see fractional counts, rather than integer counts. 
+
+```{r example continued 2}
+ftable(r)[which(ptable(r)[,1]<0.025 & ptable(r)[,2]>=2)]
+```
+
+We can also use bbplot1d() and bbplot2d to visualize the pathway testing result.
+
+```{r example visulization, warning=FALSE}
+bbplot1d(r@test.result, 0.025)
+bbplot2d(r@test.result, 0.025)
+```
+

@@ -1,0 +1,20 @@
+Package: metapone
+Type: Package
+Title: Conducts pathway test of metabolomics data using a weighted permutation test
+Version: 1.0.2
+Date: 2022-1-13
+Authors@R: c(
+	person("Leqi", "Tian", role="aut"),
+    person("Tianwei", "Yu", role="aut"),
+    person("Tianwei", "Yu", email="yutianwei@cuhk.edu.cn", role="cre"))
+Description: The package conducts pathway testing from untargetted metabolomics data. It requires the user to supply feature-level test results, from case-control testing, regression, or other suitable feature-level tests for the study design. Weights are given to metabolic features based on how many metabolites they could potentially match to. The package can combine positive and negative mode results in pathway tests.
+Depends: R (>= 4.1.0), BiocParallel, fields, markdown, fdrtool, fgsea, ggplot2, ggrepel
+Imports: methods
+biocViews: Technology, MassSpectrometry, Metabolomics, Pathways
+License: Artistic-2.0
+LazyLoad: yes
+NeedsCompilation: no
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr

@@ -1,0 +1,18 @@
+export(metapone)
+exportClasses(metaponeResult)
+export(bbplot1d)
+export(bbplot2d)
+export(ptable)
+export(ftable)
+import(fields)
+import(ggplot2)
+import(ggrepel)
+import(markdown)
+importFrom("methods", "new")
+importFrom("BiocParallel", "bplapply")
+importFrom("stats", "approx", "density", "dnorm", "qnorm", "sd")
+importFrom("fdrtool", "fdrtool")
+importFrom("fgsea", "fgseaSimple")
+importFrom("stats", "complete.cases", "p.adjust", "reorder")
+
+
