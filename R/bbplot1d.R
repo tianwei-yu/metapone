@@ -1,9 +1,10 @@
 globalVariables(c("p_value","logp", "lfdr", "n_metabolites", "n_significant_metabolites"))
 bbplot1d <- 
-  function(res, p_thres = 0.05){
-    res_05 <- res[res$p_value < p_thres,]
+  function(res, p_thres = 0.05, sig_metab_thres=1){
+    res_05 <- res[res$p_value < p_thres & res[,2]>= sig_metab_thres,]
     res_05 <- res_05[complete.cases(res_05[,c(1:4,7)]),]
-    res_05$logp <- -1*log10(as.numeric(res_05$p_value)+1e-100)
+    res_05$p_value[which(res_05$p_value==0)] <- min(as.numeric(res_05$p_value[res_05$p_value != 0]),na.rm=T)/10
+	res_05$logp <- -1*log10(as.numeric(res_05$p_value))
     #idx <- order(res_05$p_value)
     res_05 <- res_05[sort(res_05$logp, index.return = TRUE)$ix,]
     res_05$name <- rownames(res_05)
@@ -15,3 +16,4 @@ bbplot1d <-
       theme_bw()
     p
   }
+  

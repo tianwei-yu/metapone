@@ -214,9 +214,6 @@ metapone <-
             rec[m,1]<-new.p
           }
         }
-        # fdr from p-value
-        rec[which(!is.na(rec[,1])),7] <- fdrtool(as.numeric(rec[which(!is.na(rec[,1])),1]), statistic="pvalue", 
-                                                 plot=FALSE, verbose=FALSE)$lfdr
         #stopCluster(cl)
     }else{
       rec_fgsea<-matrix(NA, nrow=length(pathways),ncol=3)
@@ -307,12 +304,17 @@ metapone <-
           }
         }
       }
-      rec[which(!is.na(rec[,1])),7] <- fdrtool(as.numeric(rec[which(!is.na(rec[,1])),1]), statistic="pvalue",
-                                               plot=FALSE, verbose=FALSE)$lfdr
+
       #stopCluster(cl))$lfdr
     }
-      
-      rec[which(!is.na(rec[,1])),8] <- p.adjust(as.numeric(rec[which(!is.na(rec[,1])),1]), method = 'BH')
+      	  
+	  sel<-which(!is.na(rec[,1]) & rec[,1]<1)
+	  this.lfdr<-fdrtool(as.numeric(rec[sel,1]), statistic="pvalue", plot=FALSE, verbose=FALSE)$lfdr
+      rec[sel,7] <- this.lfdr
+	  
+	  this.BH<-p.adjust(as.numeric(rec[sel,1]), method = 'BH')
+	  rec[sel,8] <- this.BH
+	  
       rec<-as.data.frame(rec)
       for(i in c(seq(1,4),7,8)) {rec[,i]<-as.numeric(as.vector(rec[,i]))}
       for(i in seq(5,6)) rec[,i]<-as.vector(rec[,i])
