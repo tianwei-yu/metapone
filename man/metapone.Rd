@@ -13,7 +13,7 @@ metapone(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H",
 "M-2H+NH4","M-H2O-H","M-H+Cl", "M+Cl", "M+2Cl"),
 use.fractional.count=TRUE, match.tol.ppm=5, p.threshold=0.05, 
 n.permu=200, fractional.count.power=0.5, max.match.count=10, 
-use.fgsea = FALSE, use.meta = TRUE)
+use.fgsea = FALSE, use.meta = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
