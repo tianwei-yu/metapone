@@ -9,7 +9,7 @@ bbplot1d <-
     res_05 <- res_05[sort(res_05$logp, index.return = TRUE)$ix,]
     res_05$name <- rownames(res_05)
     p=ggplot(res_05,aes_string(x='name',y='logp'))+
-      geom_point(aes_string(color='lfdr',size='n_significant_metabolites'),alpha=0.8)+
+      geom_point(aes_string(color='lfdr',size='n_significant_metabolites'),alpha=0.5)+
       coord_flip()+
       scale_color_gradient(low = "green",high = "red")+ 
       labs(color=expression(lfdr),size="N_sig_metab",x = " ", y = "-log10(Pvalue)",title="Overview of Enriched Pathway")+ 

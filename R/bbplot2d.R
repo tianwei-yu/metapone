@@ -8,10 +8,10 @@ bbplot2d <-
 	res_05$logp <- -1*log10(as.numeric(res_05$p_value))
     
     p = ggplot(res_05,aes_string(x = 'logp',y = 'n_significant_metabolites'))+
-      geom_point(aes_string(size = 'n_metabolites', color = 'lfdr')) +
+      geom_point(aes_string(size='n_significant_metabolites', color = 'lfdr')) +
       scale_color_gradient(low = 'green', high = 'red') +
       geom_text_repel(aes(`logp`, `n_significant_metabolites`, label = rownames(res_05)),  size=4) 
-      labs(color=expression('lfdr'),size="Number of metabolites",x="-log10(Pvalue)",y="Number of significant metabolites",
+      labs(color=expression('lfdr'),size='n_significant_metabolites',x="-log10(Pvalue)",y="Number of significant metabolites",
            title="Overview of Enriched Pathway")+ theme_bw()
 	p
   }

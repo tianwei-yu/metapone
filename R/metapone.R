@@ -1,5 +1,5 @@
 metapone <-
-  function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", "M+Na", "M+ACN+H","M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", "2M+ACN+H"), neg.adductlist = c("M-H","M-2H","M-2H+Na","M-2H+K", "M-2H+NH4","M-H2O-H","M-H+Cl", "M+Cl", "M+2Cl"),use.fractional.count=TRUE, match.tol.ppm=5, p.threshold=0.05, n.permu=200, fractional.count.power=0.5, max.match.count=10, use.fgsea = FALSE, use.meta = TRUE)
+  function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", "M+Na", "M+ACN+H","M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", "2M+ACN+H"), neg.adductlist = c("M-H","M-2H","M-2H+Na","M-2H+K", "M-2H+NH4","M-H2O-H","M-H+Cl", "M+Cl", "M+2Cl"),use.fractional.count=TRUE, match.tol.ppm=5, p.threshold=0.05, n.permu=200, fractional.count.power=0.5, max.match.count=10, use.fgsea = FALSE, use.meta = FALSE)
   {
     concate<-function(a)
     {
@@ -105,6 +105,7 @@ metapone <-
     if(!is.null(nrow(matched)))
     {
       counts<-rep(1, nrow(matched))
+      min.p <- min(unlist(matched[unlist(matched[,3]!=0),3]))
       
       prod<-unlist(matched[,1]) * unlist(matched[,2])
       uniq.prod<-unique(prod)
@@ -119,6 +120,25 @@ metapone <-
       counts<-counts^fractional.count.power
       matched<-cbind(matched, counts)
       
+	  #### limit contribution from single feature and single metabolite
+	  
+	  for(this.prod in uniq.prod)
+	  {
+		this.pos<-which(prod == this.prod)
+		this.total.count<-sum(unlist(matched[this.pos,8]))
+		if(this.total.count > 2)  matched[this.pos,8] <- unlist(matched[this.pos,8]) * 2 / this.total.count
+	  }
+	  
+	  all.matched.id<-unlist(unique(matched[,5]))
+	  for(matched.id in all.matched.id)
+	  {
+		this.pos<-which(matched[,5] == matched.id)
+		this.total.count<-sum(unlist(matched[this.pos,8]))
+		if(this.total.count>1) matched[this.pos,8] <- unlist(matched[this.pos,8]) * sqrt(this.total.count)/this.total.count
+	  }
+	  
+	  ###########################
+	  
       all.mapped<-matched[,c(5,8)]
       all.mapped<-all.mapped[which(all.mapped[,1] %in% pa[,3]),]
       sig.mapped<-matched[matched[,3]<=p.threshold,c(5,8)]
@@ -133,7 +153,7 @@ metapone <-
                        "mapped_metabolites", "lfdr", "adjust.p")
       
       rec2<-new("list")    
-
+      
       for(m in seq_len(length(pathways)))
       {
         pathway<-pathways[m]
@@ -143,19 +163,19 @@ metapone <-
         white.balls<-sum(unlist(all.mapped[which(all.mapped[,1] %in% metabolites),2]))
         #if(white.balls > 0)
         #{
-          found.white.balls<-sum(unlist(sig.mapped[which(sig.mapped[,1] %in% metabolites),2]))
-          
-          
-          mapped.metabolites<-metabolites[which(metabolites %in% all.mapped)]
-          sig.metabolites<-metabolites[which(metabolites %in% sig.mapped)]
-          
-          rec[m,1]<-1
-          rec[m,2]<-found.white.balls
-          rec[m,3]<-white.balls
-          rec[m,4]<-sum(pa[,2] == pathway)
-          rec[m,5]<-concate(sig.metabolites)
-          rec[m,6]<-concate(mapped.metabolites)
-          
+        found.white.balls<-sum(unlist(sig.mapped[which(sig.mapped[,1] %in% metabolites),2]))
+        
+        
+        mapped.metabolites<-metabolites[which(metabolites %in% all.mapped)]
+        sig.metabolites<-metabolites[which(metabolites %in% sig.mapped)]
+        
+        rec[m,1]<-1
+        rec[m,2]<-found.white.balls
+        rec[m,3]<-white.balls
+        rec[m,4]<-sum(pa[,2] == pathway)
+        rec[m,5]<-concate(sig.metabolites)
+        rec[m,6]<-concate(mapped.metabolites)
+        
         #}
         
         this.sel<-which(matched[,5] %in% pa[pa[,2] == pathway,3] & matched[,3]<=p.threshold)
@@ -163,9 +183,9 @@ metapone <-
         if(length(this.sel)==1) rec2[[m]]<-unlist(matched[this.sel,])
         if(length(this.sel)==0) rec2[[m]]<-NA
       }
-        
-        if(use.fgsea==FALSE)
-        {
+      
+      if(use.fgsea==FALSE)
+      {
         ## permutation test
         
         #rec.permu<-foreach(nnn=1:n.permu, .combine=cbind) %dopar%
@@ -215,110 +235,112 @@ metapone <-
           }
         }
         #stopCluster(cl)
-    }else{
-      rec_fgsea<-matrix(NA, nrow=length(pathways),ncol=3)
-      rownames(rec_fgsea)<-pathways
-      colnames(rec_fgsea)<-c("ES", "NES", "nMoreExtreme")
-      rec <- cbind(rec, rec_fgsea)
-      uniq.meta <- unique(matched[,5])
-      meta.imp <- rep(0, length(uniq.meta))
-      names(meta.imp) <- uniq.meta
-      
-      if(use.meta == TRUE){
-        ######################## fgsea part ########################
-        ############## 1 from the prospective of meta ##############
-        for (this.meta in uniq.meta) {
-          this.meta <- this.meta[[1]]
-          contain.feature <- as.data.frame(matched[which(matched[,5]==this.meta),])
-          info <- unlist(contain.feature[,1]) * unlist(contain.feature[,2])
-          
-          contain.feature[,3] <- unlist(contain.feature[,3])*unlist(contain.feature[,8])
-          max.p <- max(unlist(contain.feature[,3]))
-          avg.p <- mean(unlist(contain.feature[,3]))
-          #meta.imp[this.meta] <- -log(sum(contain.feature[,3]))
-          meta.imp[this.meta] <- -log(2*max.p)
-        }
-        #plot(sort(meta.imp))
-
-        pathway.meta <- pa[which(pa[,3] %in% uniq.meta),c(2,3)]
-        uniq.pathway <- unique(pathway.meta[,1])
-        pathway_fgsea <- new("list")
-        for (this.pathway in uniq.pathway) {
-          new.list <- new("list")
-          new.list <- pathway.meta[which(pathway.meta[,1]==this.pathway),2]
-          pathway_fgsea <- c(pathway_fgsea, list(new.list))
-        }
-        names(pathway_fgsea) <- uniq.pathway
-        
-        f<-fgseaSimple(pathway_fgsea, sort(meta.imp), nperm=n.permu, maxSize = 500)  # fgsea result
-        
-        for(m in seq_len(length(pathways))){
-          if(pathways[m] %in% f$pathway){
-            idx <- which(f$pathway==pathways[m])
-            new.p = f$pval[idx]
-            rec[m,1]<-as.numeric(new.p)
-            rec[m,9]<-as.numeric(f$ES[idx])
-            rec[m,10]<-as.numeric(f$NES[idx])
-            rec[m,11]<-as.numeric(f$nMoreExtreme[idx])
-            }
-        }
-        
       }else{
+        rec_fgsea<-matrix(NA, nrow=length(pathways),ncol=3)
+        rownames(rec_fgsea)<-pathways
+        colnames(rec_fgsea)<-c("ES", "NES", "nMoreExtreme")
+        rec <- cbind(rec, rec_fgsea)
+        uniq.meta <- unique(matched[,5])
+        meta.imp <- rep(0, length(uniq.meta))
+        names(meta.imp) <- uniq.meta
         
-        ############## 2 from the prospective of feature ##############
-        pathway.meta <- pa[which(pa[,3] %in% uniq.meta),c(2,3)]
-        uniq.pathway <- unique(pathway.meta[,1])
-        pathway_fgsea <- new("list")
-        for (this.pathway in uniq.pathway) {
-          new.list <- new("list")
-          new.list <- pathway.meta[which(pathway.meta[,1]==this.pathway),2]
-          new.feature.list <- c()
+        if(use.meta == TRUE){
+          ######################## fgsea part ########################
+          ############## 1 from the prospective of meta ##############
+          for (this.meta in uniq.meta) {
+            this.meta <- this.meta[[1]]
+            contain.feature <- as.data.frame(matched[which(matched[,5]==this.meta),])
+            info <- unlist(contain.feature[,1]) * unlist(contain.feature[,2])
+            
+            contain.feature[,3] <- unlist(contain.feature[,3])*unlist(contain.feature[,8])
+            max.p <- max(unlist(contain.feature[,3]))
+            avg.p <- mean(unlist(contain.feature[,3]))
+            #meta.imp[this.meta] <- -log(sum(contain.feature[,3]))
+            meta.imp[this.meta] <- -log(2*max(min.p*0.1,max.p))
+          }
+          #plot(sort(meta.imp))
           
-          for (this.meta in new.list){
-            if (length(which(matched[,5]==this.meta))!=0){
-              mz_time <- unlist(matched[which(matched[,5]==this.meta),1]) * unlist(matched[which(matched[,5]==this.meta),2])
-              idx <- which(uniq.prod %in% mz_time)
-              new.feature.list <- c(new.feature.list, idx) 
+          pathway.meta <- pa[which(pa[,3] %in% uniq.meta),c(2,3)]
+          uniq.pathway <- unique(pathway.meta[,1])
+          pathway_fgsea <- new("list")
+          for (this.pathway in uniq.pathway) {
+            new.list <- new("list")
+            new.list <- pathway.meta[which(pathway.meta[,1]==this.pathway),2]
+            pathway_fgsea <- c(pathway_fgsea, list(new.list))
+          }
+          names(pathway_fgsea) <- uniq.pathway
+          
+          f<-fgseaSimple(pathway_fgsea, sort(meta.imp), nperm=n.permu, maxSize = 500)  # fgsea result
+          
+          for(m in seq_len(length(pathways))){
+            if(pathways[m] %in% f$pathway){
+              idx <- which(f$pathway==pathways[m])
+              new.p = f$pval[idx]
+              rec[m,1]<-as.numeric(new.p)
+              rec[m,9]<-as.numeric(f$ES[idx])
+              rec[m,10]<-as.numeric(f$NES[idx])
+              rec[m,11]<-as.numeric(f$nMoreExtreme[idx])
             }
           }
-          pathway_fgsea <- c(pathway_fgsea, list(new.feature.list))
-        }
-        
-        names(pathway_fgsea) <- uniq.pathway
-        
-        feature.imp <- uniq.pval
-        names(feature.imp) <- c(1:length(feature.imp))
-        
-        #plot(sort(-log(feature.imp*2)))
-        
-        f<-fgseaSimple(pathway_fgsea, sort(-log(feature.imp*2)), nperm=n.permu, maxSize = 500)
-  
-        for(m in seq_len(length(pathways))){
-          if(pathways[m] %in% f$pathway){
-            idx <- which(f$pathway==pathways[m])
-            new.p = f$pval[idx]
-            rec[m,1]<-as.numeric(new.p)
-            rec[m,9]<-as.numeric(f$ES[idx])
-            rec[m,10]<-as.numeric(f$NES[idx])
-            rec[m,11]<-as.numeric(f$nMoreExtreme[idx])
+          
+        }else{
+          
+          ############## 2 from the prospective of feature ##############
+          pathway.meta <- pa[which(pa[,3] %in% uniq.meta),c(2,3)]
+          uniq.pathway <- unique(pathway.meta[,1])
+          pathway_fgsea <- new("list")
+          for (this.pathway in uniq.pathway) {
+            new.list <- new("list")
+            new.list <- pathway.meta[which(pathway.meta[,1]==this.pathway),2]
+            new.feature.list <- c()
+            
+            for (this.meta in new.list){
+              if (length(which(matched[,5]==this.meta))!=0){
+                mz_time <- unlist(matched[which(matched[,5]==this.meta),1]) * unlist(matched[which(matched[,5]==this.meta),2])
+                idx <- which(uniq.prod %in% mz_time)
+                new.feature.list <- c(new.feature.list, idx) 
+              }
+            }
+            pathway_fgsea <- c(pathway_fgsea, list(new.feature.list))
+          }
+          
+          names(pathway_fgsea) <- uniq.pathway
+          
+          feature.imp <- uniq.pval
+          names(feature.imp) <- c(1:length(feature.imp))
+          feature.imp[feature.imp==0] = min.p*0.1
+          #plot(sort(-log(feature.imp*2)))
+          
+          f<-fgseaSimple(pathway_fgsea, sort(-log(feature.imp*2)), nperm=n.permu, maxSize = 500)
+          
+          for(m in seq_len(length(pathways))){
+            if(pathways[m] %in% f$pathway){
+              idx <- which(f$pathway==pathways[m])
+              new.p = f$pval[idx]
+              rec[m,1]<-as.numeric(new.p)
+              rec[m,9]<-as.numeric(f$ES[idx])
+              rec[m,10]<-as.numeric(f$NES[idx])
+              rec[m,11]<-as.numeric(f$nMoreExtreme[idx])
+            }
           }
         }
+        
+        #stopCluster(cl))$lfdr
       }
-
-      #stopCluster(cl))$lfdr
-    }
-      	  
-	  sel<-which(!is.na(rec[,1]) & rec[,1]<1)
-	  this.lfdr<-fdrtool(as.numeric(rec[sel,1]), statistic="pvalue", plot=FALSE, verbose=FALSE)$lfdr
+      
+	  rec[is.na(rec[,1]),1]<-1
+	  
+      sel<-which(rec[,1]<1)
+      this.lfdr<-fdrtool(as.numeric(rec[sel,1]), statistic="pvalue", plot=FALSE, verbose=FALSE)$lfdr
       rec[sel,7] <- this.lfdr
-	  
-	  this.BH<-p.adjust(as.numeric(rec[sel,1]), method = 'BH')
-	  rec[sel,8] <- this.BH
-	  
+      
+      this.BH<-p.adjust(as.numeric(rec[sel,1]), method = 'BH')
+      rec[sel,8] <- this.BH
+      
       rec<-as.data.frame(rec)
       for(i in c(seq(1,4),7,8)) {rec[,i]<-as.numeric(as.vector(rec[,i]))}
       for(i in seq(5,6)) rec[,i]<-as.vector(rec[,i])
-    
+      
       
       names(rec2)<-pathways
       
