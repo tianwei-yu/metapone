@@ -2,13 +2,13 @@
 \alias{pos}
 \docType{data}
 \title{
-Example positive mode data from the Dorm Room Inhalation to Vehicle Emission (DRIVE) study
+Example positive mode data from the Metabolome Atlas of the Aging Mouse Brain
 }
 \description{
-The data is from the DRIVE study. It is the test results from the data generated using hydrophilic interaction liquid chromatography (HILIC) with positive electrospray ionization (ESI). }
+The data is generated from the hypocampus data of the Metabolome Atlas of the Aging Mouse Brain (ST001888) dataset. The p-values and test statistics were obtained by contrasting mouse hypocampus metabolome between prime-age mice and aging mice.}
 \usage{data("pos")}
 \format{
-  A data frame with 2252 observations on the following 4 variables.
+  A data frame with 10085 observations on the following 4 variables.
   \describe{
     \item{\code{m.z}}{a numeric vector. The mass-to-charge ratio of the features.}
     \item{\code{retention.time}}{a numeric vector. The retention time of the features.}
@@ -17,7 +17,7 @@ The data is from the DRIVE study. It is the test results from the data generated
   }
 }
 \references{
-Liang D, Moutinho JL, Golan R, Yu T, Ladva CN, Niedzwiecki M, Walker DI, Sarnat SE, Chang HH, Greenwald R, Jones DP, Russell AG, Sarnat JA (2018) Use of high-resolution metabolomics for the identification of metabolic T signals associated with traffic-related air pollution. Environment International. 120:145-154.
+https://www.metabolomicsworkbench.org/data/DRCCMetadata.php?Mode=Study&DataMode=FactorsData&StudyID=ST001888&StudyType=MS&ResultType=1
 }
 \examples{
 data(pos)

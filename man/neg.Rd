@@ -2,14 +2,13 @@
 \alias{neg}
 \docType{data}
 \title{
-Example negative mode data from the Dorm Room Inhalation to Vehicle Emission (DRIVE) study
+Example negative mode data from the Metabolome Atlas of the Aging Mouse Brain
 }
 \description{
-Data matrix from negative mode results. It is the test results from the data generated using C18 hydrophobic reversed-phase chromatography with negative ESI.
-}
+The data is generated from the hypocampus data of the Metabolome Atlas of the Aging Mouse Brain (ST001888) dataset. The p-values and test statistics were obtained by contrasting mouse hypocampus metabolome between prime-age mice and aging mice.}
 \usage{data("neg")}
 \format{
-  A data frame with 3337 observations on the following 4 variables.
+  A data frame with 6947 observations on the following 4 variables.
   \describe{
     \item{\code{m.z}}{a numeric vector. The mass-to-charge ratio of the features.}
     \item{\code{retention.time}}{a numeric vector. The retention time of the features.}
@@ -18,7 +17,7 @@ Data matrix from negative mode results. It is the test results from the data gen
 	}
 }
 \references{
-Liang D, Moutinho JL, Golan R, Yu T, Ladva CN, Niedzwiecki M, Walker DI, Sarnat SE, Chang HH, Greenwald R, Jones DP, Russell AG, Sarnat JA (2018) Use of high-resolution metabolomics for the identification of metabolic T signals associated with traffic-related air pollution. Environment International. 120:145-154.
+https://www.metabolomicsworkbench.org/data/DRCCMetadata.php?Mode=Study&DataMode=FactorsData&StudyID=ST001888&StudyType=MS&ResultType=1
 }
 \examples{
 data(neg)
