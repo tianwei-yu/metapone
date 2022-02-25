@@ -106,6 +106,7 @@ metapone <-
     {
       counts<-rep(1, nrow(matched))
       min.p <- min(unlist(matched[unlist(matched[,3]!=0),3]))
+      matched[unlist(matched[,3])==0,3] <- min.p/10 
       
       prod<-unlist(matched[,1]) * unlist(matched[,2])
       uniq.prod<-unique(prod)
@@ -250,15 +251,8 @@ metapone <-
           for (this.meta in uniq.meta) {
             this.meta <- this.meta[[1]]
             contain.feature <- as.data.frame(matched[which(matched[,5]==this.meta),])
-            info <- unlist(contain.feature[,1]) * unlist(contain.feature[,2])
-            
-            contain.feature[,3] <- unlist(contain.feature[,3])*unlist(contain.feature[,8])
-            max.p <- max(unlist(contain.feature[,3]))
-            avg.p <- mean(unlist(contain.feature[,3]))
-            #meta.imp[this.meta] <- -log(sum(contain.feature[,3]))
-            meta.imp[this.meta] <- -log(2*max(min.p*0.1,max.p))
+            meta.imp[this.meta] <- sum(-log(unlist(contain.feature[,3]))*unlist(contain.feature[,8]))
           }
-          #plot(sort(meta.imp))
           
           pathway.meta <- pa[which(pa[,3] %in% uniq.meta),c(2,3)]
           uniq.pathway <- unique(pathway.meta[,1])
@@ -306,9 +300,12 @@ metapone <-
           
           names(pathway_fgsea) <- uniq.pathway
           
-          feature.imp <- uniq.pval
+          uniq.weighted.pval <- rep(0, length(uniq.prod))
+          for(this.prod in uniq.prod){
+            uniq.weighted.pval[which(uniq.prod == this.prod)]<-(unlist(matched[which(prod == this.prod),3])[1])*(unlist(matched[which(prod == this.prod),8])[1])
+          }
+          feature.imp <- -log(uniq.weighted.pval)
           names(feature.imp) <- c(1:length(feature.imp))
-          feature.imp[feature.imp==0] = min.p*0.1
           #plot(sort(-log(feature.imp*2)))
           
           f<-fgseaSimple(pathway_fgsea, sort(-log(feature.imp*2)), nperm=n.permu, maxSize = 500)
@@ -328,7 +325,7 @@ metapone <-
         #stopCluster(cl))$lfdr
       }
       
-	  rec[is.na(rec[,1]),1]<-1
+	    rec[is.na(rec[,1]),1]<-1
 	  
       sel<-which(rec[,1]<1)
       this.lfdr<-fdrtool(as.numeric(rec[sel,1]), statistic="pvalue", plot=FALSE, verbose=FALSE)$lfdr
