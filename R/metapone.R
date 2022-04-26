@@ -113,12 +113,12 @@ metapone <-
       uniq.pval<-rep(0, length(uniq.prod))
       for(this.prod in uniq.prod)
       {
-        counts[which(prod == this.prod)]<-1/sum(prod == this.prod)
+        counts[which(prod == this.prod)]<-sum(prod == this.prod)
         uniq.pval[which(uniq.prod == this.prod)]<-unlist(matched[which(prod == this.prod),3])[1]
       }
       counts[which(counts > max.match.count)]<-max.match.count
       
-      counts<-counts^fractional.count.power
+      counts<-(1/counts)^fractional.count.power
       matched<-cbind(matched, counts)
       
 	  #### limit contribution from single feature and single metabolite
