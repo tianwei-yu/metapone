@@ -1,5 +1,5 @@
 metapone <-
-  function(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", "M+Na", "M+ACN+H","M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", "2M+ACN+H"), neg.adductlist = c("M-H","M-2H","M-2H+Na","M-2H+K", "M-2H+NH4","M-H2O-H","M-H+Cl", "M+Cl", "M+2Cl"),use.fractional.count=TRUE, match.tol.ppm=5, p.threshold=0.05, n.permu=200, fractional.count.power=0.5, max.match.count=10, use.fgsea = FALSE, use.meta = FALSE)
+  function(dat = NULL, type = NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", "M+NH4", "M+Na", "M+ACN+H","M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", "2M+ACN+H"), neg.adductlist = c("M-H","M-2H","M-2H+Na","M-2H+K", "M-2H+NH4","M-H2O-H","M-H+Cl", "M+Cl", "M+2Cl"),use.fractional.count=TRUE, match.tol.ppm=5, p.threshold=0.05, n.permu=200, fractional.count.power=0.5, max.match.count=10, use.fgsea = FALSE, use.meta = FALSE)
   {
     concate<-function(a)
     {
@@ -10,13 +10,19 @@ metapone <-
       }
       return(b)
     }
+
+    if (length(dat)!=length(type)){
+      message("The lengths of dat and type do not match")
+      stop()
+    }
     
-    
-    #cl <- makeCluster(num.nodes)
-    #registerDoParallel(cl)
-    
-    adductlist<-list(pos.adductlist, neg.adductlist)
-    dat<-list(pos, neg)
+    adductlist <- list()
+    for (i in 1:length(type)) {
+      if (type[i]=='pos') {adductlist[[i]] <- pos.adductlist}
+      else if (type[i]=='neg') {adductlist[[i]] <- neg.adductlist}
+      else {message('Element in type should be pos or neg')
+        stop()}
+    }
     
     comp.mz<-new("list")
     for(i in seq_len(length(adductlist))) comp.mz[[i]]<-hmdbCompMZ[hmdbCompMZ[,3] %in% adductlist[[i]],]

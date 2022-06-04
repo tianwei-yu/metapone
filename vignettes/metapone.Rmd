@@ -68,14 +68,16 @@ It is easy to see that when p=0, no penalty is assigned for multiple-matching. T
 Other parameters include p.threshold, which controls which metabolic feature is considered significant. If use.fgsea = FALSE, then testing is done by permutation. Otherwise, a GSEA type testing is conducted and the parameter use.meta controls using metabolite-based or feature-based testing. Overall, the analysis is conducted this way:
 
 ```{r example analysis, warning=FALSE}
+dat <- list(pos, neg)
+type <- list("pos", "neg")
 # permutation test
-r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=200,fractional.count.power=0.5, max.match.count=10, use.fgsea = FALSE)
+r<-metapone(dat, type, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=200,fractional.count.power=0.5, max.match.count=10, use.fgsea = FALSE)
 
 # GSEA type testing based on metabolites
-#r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10, use.fgsea = TRUE, use.meta = TRUE)
+#r<-metapone(dat, type, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10, use.fgsea = TRUE, use.meta = TRUE)
 
 # GSEA type testing based on features
-#r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10, use.fgsea = TRUE, use.meta = FALSE)
+#r<-metapone(dat, type, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10, use.fgsea = TRUE, use.meta = FALSE)
 
 hist(ptable(r)[,1])
 ```

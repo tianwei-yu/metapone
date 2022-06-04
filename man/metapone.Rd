@@ -7,7 +7,7 @@ METAbolic pathway testing using both POsitive and NEgative mode data
 Metapone conducts pathway tests for untargeted metabolomics data. It has three main characteristics: (1) expanded database combining SMPDB and Mummichog databases, with manual cleaning to remove redundancies; (2) A new weighted testing scheme to address the issue of metabolite-feature matching uncertainties; (3) Can consider positive mode and negative mode data in a single analysis.
 }
 \usage{
-metapone(pos=NULL, neg=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", 
+metapone(dat=NULL, type=NULL, pa, hmdbCompMZ, pos.adductlist = c("M+H", 
 "M+NH4", "M+Na", "M+ACN+H","M+ACN+Na", "M+2ACN+H", "2M+H", "2M+Na", 
 "2M+ACN+H"), neg.adductlist = c("M-H","M-2H","M-2H+Na","M-2H+K", 
 "M-2H+NH4","M-H2O-H","M-H+Cl", "M+Cl", "M+2Cl"),
@@ -17,11 +17,11 @@ use.fgsea = FALSE, use.meta = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{pos}{
-The positive ion mode test results. A matrix with four columns: m/z, retention time, p-value, test statistic. The package doesn't require both pos and neg to be present. One ion mode result is sufficient.
+  \item{dat}{
+The list of test results. An element in the list should be postive ion mode test results or negative ion mode test results with four columns: m/z, retention time, p-value, test statistic. The package doesn't require both pos and neg to be present. One ion mode result is sufficient. Multiple ion mode results are allowed.
 }
-  \item{neg}{
-The negative ion mode test results. A matrix with four columns: m/z, retention time, p-value, test statistic. The package doesn't require both pos and neg to be present. One ion mode result is sufficient.
+  \item{type}{
+The list of corresponding ion mode of each element in dat. Each element in the list should be "pos" or "neg". The size of type should be consistent with the size of dat.
 }
   \item{pa}{
 Pathway information. A data frame with five columns: database pathway ID, pathway name, HMDB ID, KEGG ID, category of pathway.
@@ -115,18 +115,20 @@ data(hmdbCompMZ.metapone)
 data(pa)
 data(pos)
 data(neg)
+dat <- list(pos, neg)
+type <- list("pos", "neg")
 # Permutation-based weighted hypergeometric test
-r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,
+r<-metapone(dat, type, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,
    n.permu=100,fractional.count.power=0.5, max.match.count=10)
 hist(ptable(r)[,1])
 
 # Metabolites based GSEA test
-r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,
+r<-metapone(dat, type, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,
    n.permu=100,fractional.count.power=0.5, max.match.count=10, use.fgsea = TRUE, use.meta = TRUE)
 hist(ptable(r)[,1])
 
 # Features based GSEA test
-r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,
+r<-metapone(dat, type, pa, hmdbCompMZ=hmdbCompMZ.metapone, p.threshold=0.05,
    n.permu=100,fractional.count.power=0.5, max.match.count=10, use.fgsea = FALSE, use.meta = FALSE)
 hist(ptable(r)[,1])
 }
