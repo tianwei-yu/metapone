@@ -92,7 +92,9 @@ Setting the cap of n: max.match.count = 10 (this is to cap the level of penalty 
 Other parameters include p.threshold, which controls which metabolic feature is considered significant. The testing is done by permutation. Overall, the analysis is conducted this way:
 
 ```{r example analysis}
-> r<-metapone(pos, neg, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, 
+> dat <- list(pos, neg)
+> type <- list("pos", "neg")
+> r<-metapone(dat, type, pa, hmdbCompMZ=hmdbCompMZ, pos.adductlist=pos.adductlist, neg.adductlist=neg.adductlist, 
      p.threshold=0.05,n.permu=100,fractional.count.power=0.5, max.match.count=10)
 > hist(ptable(r)[,1])
 ```
