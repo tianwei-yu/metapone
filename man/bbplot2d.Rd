@@ -8,7 +8,7 @@ Plot of metapone result.
 The function \code{bbplot2d()} select important pathways with their P-value less than a threshold and returns a 2-D bubble plot with -log10(Pvalue) and the number of significant metabolites as coordinate axes.
 }
 \usage{
-bbplot2d(res, p_thres = 0.05, sig_metab_thres = 1)
+bbplot2d(res, p_thres = 0.05, sig_metab_thres = 1, low.color = "MidnightBlue", high.color = "LightSkyBlue")
 }
 
 \arguments{
@@ -20,7 +20,13 @@ The threshold of P-value for pathways to be shown in the bubble plot. The defaul
 }
 \item{sig_metab_thres}{
 The threshold of fractional matched significant metabolite count for pathways to be shown in the bubble plot. The default is 1. 
-} 
+}
+\item{low.color}{
+The GRB color of the lowest ldfr value to be shown in the bubble plot. 
+}
+\item{high.color}{
+The GRB color of the highest ldfr value to be shown in the bubble plot. 
+}
 }
 \author{
 Leqi Tian (\email{leqitian@link.cuhk.edu.cn})

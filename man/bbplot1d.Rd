@@ -8,7 +8,7 @@ Plot of metapone result.
 The function \code{bbplot1d()} select important pathways with their P-value less than a threshold and returns ranked bubble plot showing important pathways names and their corresponding -log10(Pvalue).
 }
 \usage{
-bbplot1d(res, p_thres = 0.05, sig_metab_thres = 1)
+bbplot1d(res, p_thres = 0.05, sig_metab_thres = 1, low.color = "MidnightBlue", high.color = "LightSkyBlue")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,6 +21,12 @@ The threshold of P-value for pathways to be shown in the bubble plot. The defaul
 \item{sig_metab_thres}{
 The threshold of fractional matched significant metabolite count for pathways to be shown in the bubble plot. The default is 1. 
 } 
+\item{low.color}{
+The GRB color of the lowest ldfr value to be shown in the bubble plot. 
+}
+\item{high.color}{
+The GRB color of the highest ldfr value to be shown in the bubble plot. 
+}
 }
 \author{
 Leqi Tian (\email{leqitian@link.cuhk.edu.cn})
